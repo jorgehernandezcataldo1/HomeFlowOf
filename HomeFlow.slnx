@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="HomeFlow.Application/HomeFlow.Application.csproj" />
+  <Project Path="HomeFlow.Domain/HomeFlow.Domain.csproj" />
+  <Project Path="HomeFlow.Infrastructure/HomeFlow.Infrastructure.csproj" />
+  <Project Path="HomeFlow.Shared/HomeFlow.Shared.csproj" />
+  <Project Path="HomeFlow.Web/HomeFlow.Web.csproj" />
+</Solution>
