@@ -1,0 +1,59 @@
+-- ============================================================
+-- INSTRUCCIONES PARA EJECUTAR LAS MIGRACIONES EN SQL SERVER
+-- ============================================================
+
+-- PASO 1: Abrir SQL Server Management Studio
+-- PASO 2: Conectarse a tu instancia local (LocalDB o SQL Server Express)
+-- PASO 3: Crear una nueva base de datos llamada "HomeFlow"
+-- PASO 4: Ejecutar todo el contenido del archivo 01_CreateDatabase_HomeFlow.sql
+
+-- Si ya tienes la BD creada, ejecuta esto para borrar todo:
+/*
+USE master;
+IF EXISTS (SELECT 1 FROM sys.databases WHERE name = 'HomeFlow')
+BEGIN
+	ALTER DATABASE HomeFlow SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+	DROP DATABASE HomeFlow;
+END
+CREATE DATABASE HomeFlow;
+*/
+
+-- ============================================================
+-- VERIFICACIÓN DE TABLAS CREADAS
+-- ============================================================
+-- Ejecuta esto para verificar que todo se creó correctamente:
+/*
+USE HomeFlow;
+
+SELECT 
+	TABLE_NAME
+FROM INFORMATION_SCHEMA.TABLES
+WHERE TABLE_TYPE = 'BASE TABLE'
+ORDER BY TABLE_NAME;
+
+-- Deberías ver aproximadamente 18 tablas creadas
+*/
+
+-- ============================================================
+-- CADENA DE CONEXIÓN PARA appsettings.json
+-- ============================================================
+-- Para LocalDB:
+-- "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=HomeFlow;Trusted_Connection=true;"
+
+-- Para SQL Server Express o completo:
+-- "DefaultConnection": "Server=.\\SQLEXPRESS;Database=HomeFlow;Trusted_Connection=true;"
+-- o
+-- "DefaultConnection": "Server=localhost;Database=HomeFlow;User Id=sa;Password=TuPassword;"
+
+-- ============================================================
+-- PRÓXIMOS PASOS EN EL PROYECTO .NET
+-- ============================================================
+-- 1. Actualizar appsettings.json con la cadena de conexión
+-- 2. Instalar NuGet packages necesarios (EF Core, SqlServer, etc.)
+-- 3. Crear entidades en HomeFlow.Domain
+-- 4. Crear DbContext en HomeFlow.Infrastructure
+-- 5. Crear DTOs en HomeFlow.Shared
+-- 6. Crear Repositorios e Interfaces
+-- 7. Crear Servicios de Aplicación
+-- 8. Hacer migraciones EF Core: Add-Migration Initial
+-- 9. Actualizar BD: Update-Database
