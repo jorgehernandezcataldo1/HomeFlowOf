@@ -6,12 +6,12 @@ namespace HomeFlow.Web.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ClientsController : ControllerBase
+    public class ClientesController : ControllerBase
     {
         private readonly IClientService _clientService;
-        private readonly ILogger<ClientsController> _logger;
+        private readonly ILogger<ClientesController> _logger;
 
-        public ClientsController(IClientService clientService, ILogger<ClientsController> logger)
+        public ClientesController(IClientService clientService, ILogger<ClientesController> logger)
         {
             _clientService = clientService ?? throw new ArgumentNullException(nameof(clientService));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));

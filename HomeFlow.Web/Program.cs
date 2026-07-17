@@ -1,5 +1,6 @@
 ﻿using HomeFlow.Infrastructure;
 using HomeFlow.Application;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,20 +14,36 @@ builder.Services.AddInfrastructure(connectionString);
 // Add Application Services - Servicios y Validadores
 builder.Services.AddApplication();
 
-// Add CORS if needed for API
+// Autenticación por cookies (login del corredor / usuario de la empresa)
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.LogoutPath = "/Account/Logout";
+        options.AccessDeniedPath = "/Account/Login";
+        options.ExpireTimeSpan = TimeSpan.FromHours(8);
+        options.SlidingExpiration = true;
+        options.Cookie.Name = "HomeFlow.Auth";
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SameSite = SameSiteMode.Lax;
+    });
+
+builder.Services.AddAuthorization();
+
+// CORS (útil si más adelante consumes la API desde otra app / móvil)
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowLocalhost", builder =>
+    options.AddPolicy("AllowLocalhost", policy =>
     {
-        builder.AllowAnyOrigin()
-               .AllowAnyMethod()
-               .AllowAnyHeader();
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
     });
 });
 
 var app = builder.Build();
 
-// Apply EF Core migrations automatically
+// Aplica migraciones EF Core automáticamente al iniciar
 app.ApplyMigrations();
 
 // Configure the HTTP request pipeline
@@ -41,13 +58,14 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// Use CORS
 app.UseCors("AllowLocalhost");
 
+// El orden importa: Authentication SIEMPRE antes de Authorization
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Dashboard}/{action=Index}/{id?}");
 
 app.Run();
