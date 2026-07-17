@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+	<Compile Remove="Controllers\ClientesController.cs" />
+	<Compile Remove="Controllers\PropertiesController.cs" />
 	<ProjectReference Include="..\HomeFlow.Application\HomeFlow.Application.csproj" />
 	<ProjectReference Include="..\HomeFlow.Infrastructure\HomeFlow.Infrastructure.csproj" />
   </ItemGroup>

@@ -15,12 +15,11 @@ namespace HomeFlow.Shared.DTOs.Auth
     /// </summary>
     public class LoginResponse
     {
-        public int CorredorId { get; set; }
-        public string Nombre { get; set; }
-        public string Apellido { get; set; }
-        public string Correo { get; set; }
-        public string Token { get; set; } // Para future JWT implementation
-        public bool EsAdmin { get; set; }
+        public int UsuarioId { get; set; }
+        public int EmpresaId { get; set; }
+        public string Nombre { get; set; } = string.Empty;
+        public string Apellido { get; set; } = string.Empty;
+        public string Correo { get; set; } = string.Empty;
     }
 
     /// <summary>
@@ -38,6 +37,7 @@ namespace HomeFlow.Shared.DTOs.Auth
     /// </summary>
     public class RegisterCorredorRequest
     {
+        public int EmpresaId { get; set; }
         public string Rut { get; set; }
         public string Nombre { get; set; }
         public string Apellido { get; set; }

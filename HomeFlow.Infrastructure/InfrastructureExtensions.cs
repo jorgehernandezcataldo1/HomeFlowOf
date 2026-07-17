@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using HomeFlow.Domain.Interfaces;
+using HomeFlow.Infrastructure.Persistence;
 using HomeFlow.Infrastructure.Repositories;
-using HomeFlow.Infrastructure.Data;
 
 namespace HomeFlow.Infrastructure
 {
@@ -50,8 +50,9 @@ namespace HomeFlow.Infrastructure
 
                 try
                 {
-                    // Aplicar migraciones automáticamente
-                    context.Database.Migrate();
+                    // Para la primera ejecucion local se crea el esquema desde el modelo.
+                    // En produccion se reemplaza por migraciones revisadas y versionadas.
+                    context.Database.EnsureCreated();
                 }
                 catch (Exception ex)
                 {

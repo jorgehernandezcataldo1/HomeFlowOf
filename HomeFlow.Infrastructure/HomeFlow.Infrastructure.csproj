@@ -8,6 +8,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HomeFlow.Application\HomeFlow.Application.csproj" />
+    <ProjectReference Include="..\HomeFlow.Domain\HomeFlow.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Services\ClienteService.cs" />
+    <Compile Remove="Services\PropiedadService.cs" />
   </ItemGroup>
 
   <ItemGroup>

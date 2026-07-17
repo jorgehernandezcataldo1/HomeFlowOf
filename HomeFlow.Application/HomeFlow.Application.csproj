@@ -8,6 +8,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HomeFlow.Domain\HomeFlow.Domain.csproj" />
+    <ProjectReference Include="..\HomeFlow.Shared\HomeFlow.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="FluentValidation" Version="12.1.1" />
   </ItemGroup>
 
   <ItemGroup>
