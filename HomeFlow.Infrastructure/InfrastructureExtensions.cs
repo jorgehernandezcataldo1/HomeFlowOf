@@ -28,7 +28,7 @@ namespace HomeFlow.Infrastructure
                 {
                     sqlOptions.MigrationsAssembly("HomeFlow.Infrastructure");
                     sqlOptions.CommandTimeout(30);
-                    sqlOptions.EnableRetryOnFailure(maxRetryCount: 3, maxRetryDelaySeconds: 10, errorNumbersToAdd: null);
+                    sqlOptions.EnableRetryOnFailure( 3,  TimeSpan.FromSeconds(10), null);
                 });
             });
 

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using HomeFlow.Application.Interfaces;
 using HomeFlow.Shared.DTOs.Auth;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HomeFlow.Web.Controllers
 {

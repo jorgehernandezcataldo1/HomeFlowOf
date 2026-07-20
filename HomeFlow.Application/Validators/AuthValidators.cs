@@ -70,10 +70,10 @@ namespace HomeFlow.Application.Validators
 
             RuleFor(x => x.Password)
                 .NotEmpty().WithMessage("La contraseña es requerida")
-                .MinimumLength(8).WithMessage("La contraseña debe tener al menos 8 caracteres")
-                .Matches(@"[A-Z]", "La contraseña debe contener al menos una letra mayúscula")
-                .Matches(@"[a-z]", "La contraseña debe contener al menos una letra minúscula")
-                .Matches(@"[0-9]", "La contraseña debe contener al menos un número");
+                .MinimumLength(8).WithMessage("La contraseña debe tener al menos 8 caracteres");
+                //.Matches(@"[A-Z]", "La contraseña debe contener al menos una letra mayúscula")
+                //.Matches(@"[a-z]", "La contraseña debe contener al menos una letra minúscula")
+                //.Matches(@"[0-9]", "La contraseña debe contener al menos un número");
 
             RuleFor(x => x.ConfirmarPassword)
                 .Equal(x => x.Password).WithMessage("Las contraseñas no coinciden");

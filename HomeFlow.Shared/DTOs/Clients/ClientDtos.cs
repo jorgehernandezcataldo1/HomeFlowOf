@@ -75,7 +75,8 @@ namespace HomeFlow.Shared.DTOs.Clients
     /// </summary>
     public class CreatePropietarioRequest
     {
-        public ClienteDto Cliente { get; set; }
+        public CreateClienteRequest Cliente { get; set; }
+
         public string BancoPreferido { get; set; }
         public string CuentaBancaria { get; set; }
         public string TipoCuenta { get; set; }
@@ -88,7 +89,7 @@ namespace HomeFlow.Shared.DTOs.Clients
     public class ArrendatarioDto
     {
         public int ArrendatarioId { get; set; }
-        public ClienteDto Cliente { get; set; }
+        public CreateClienteRequest Cliente { get; set; }
         public decimal? LiquidoMensual { get; set; }
         public string Empleador { get; set; }
         public int? AntiguedadLaboral { get; set; }
@@ -105,7 +106,7 @@ namespace HomeFlow.Shared.DTOs.Clients
         public decimal CapacidadArriendoTeorida { get; set; }
         public bool PuedeOptar { get; set; }
 
-        public string NombreCompleto => Cliente?.NombreCompleto ?? "";
+        //public string NombreCompleto => CreateClienteRequest?.NombreCompleto ?? "";
         public string Rut => Cliente?.Rut ?? "";
     }
 
@@ -114,7 +115,7 @@ namespace HomeFlow.Shared.DTOs.Clients
     /// </summary>
     public class CreateArrendatarioRequest
     {
-        public ClienteDto Cliente { get; set; }
+        public CreateClienteRequest Cliente { get; set; }
         public decimal? LiquidoMensual { get; set; }
         public string Empleador { get; set; }
         public int? AntiguedadLaboral { get; set; }
