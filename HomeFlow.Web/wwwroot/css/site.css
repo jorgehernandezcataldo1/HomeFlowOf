@@ -1,0 +1,63 @@
+/* ============================================================
+   HomeFlow · Variables de marca
+   Cambios visuales de marca van aquí. El resto de las vistas usa
+   clases utilitarias de Bootstrap directamente (evitar CSS propio
+   salvo que sea estrictamente necesario).
+   ============================================================ */
+:root {
+  --hf-ink: #123147;      /* Azul tinta - color principal de marca */
+  --hf-ink-dark: #0b2233;
+  --hf-brand: #c9932f;    /* Dorado/latón - acento de acción */
+  --hf-brand-dark: #a9791f;
+  --hf-bg: #f5f6f8;
+  --hf-text: #1c2530;
+}
+
+body {
+  background-color: var(--hf-bg);
+  color: var(--hf-text);
+}
+
+.bg-ink { background-color: var(--hf-ink) !important; }
+.text-brand { color: var(--hf-brand) !important; }
+
+.btn-brand {
+  background-color: var(--hf-brand);
+  border-color: var(--hf-brand);
+  color: #fff;
+}
+.btn-brand:hover,
+.btn-brand:focus {
+  background-color: var(--hf-brand-dark);
+  border-color: var(--hf-brand-dark);
+  color: #fff;
+}
+
+/* -------- Layout interno (post-login) -------- */
+.sidebar {
+  width: 240px;
+  min-height: calc(100vh - 56px);
+}
+
+.sidebar .nav-link {
+  color: var(--hf-text);
+  border-radius: .5rem;
+}
+.sidebar .nav-link.active,
+.sidebar .nav-link:hover {
+  background-color: rgba(201, 147, 47, .12);
+  color: var(--hf-ink);
+}
+
+.avatar-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--hf-brand);
+  color: #fff;
+  font-size: .75rem;
+  font-weight: 600;
+}

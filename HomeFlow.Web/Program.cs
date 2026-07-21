@@ -1,11 +1,24 @@
 ﻿using HomeFlow.Infrastructure;
 using HomeFlow.Application;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container
-builder.Services.AddControllersWithViews();
+// Add services to the container.
+// Por defecto se exige un usuario autenticado en TODOS los controladores
+// (web y api). Las acciones públicas (login, etc.) se marcan explícitamente
+// con [AllowAnonymous]. Esto es intencional: es más seguro partir "cerrado"
+// y abrir puntualmente, que partir abierto y olvidar proteger algo.
+builder.Services.AddControllersWithViews(options =>
+{
+    var requireAuthenticatedUser = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+
+    options.Filters.Add(new AuthorizeFilter(requireAuthenticatedUser));
+});
 
 // Add Infrastructure - Entity Framework y Repositorios
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -18,9 +31,9 @@ builder.Services.AddApplication();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Account/Login";
-        options.LogoutPath = "/Account/Logout";
-        options.AccessDeniedPath = "/Account/Login";
+        options.LoginPath = "/Auth/Login";
+        options.LogoutPath = "/Auth/Logout";
+        options.AccessDeniedPath = "/Auth/AccessDenied";
         options.ExpireTimeSpan = TimeSpan.FromHours(8);
         options.SlidingExpiration = true;
         options.Cookie.Name = "HomeFlow.Auth";

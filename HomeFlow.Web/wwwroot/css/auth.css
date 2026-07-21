@@ -1,0 +1,78 @@
+/* ============================================================
+   HomeFlow · Pantalla de login
+   ============================================================ */
+html, body.auth-body {
+  height: 100%;
+}
+
+.auth-shell {
+  min-height: 100vh;
+}
+
+/* Panel de marca: fondo tinta + retícula sutil tipo "plano" de
+   arquitectura (referencia visual al rubro inmobiliario). */
+.auth-brand-panel {
+  background-color: var(--hf-ink);
+  background-image:
+    linear-gradient(rgba(255, 255, 255, .05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .05) 1px, transparent 1px);
+  background-size: 32px 32px;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.auth-brand-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(201, 147, 47, .25), transparent 55%);
+}
+
+.auth-brand-content {
+  position: relative;
+  z-index: 1;
+  color: #fff;
+  padding: 3rem;
+  max-width: 420px;
+}
+
+.auth-brand-logo { font-size: 2.5rem; color: var(--hf-brand); }
+.auth-brand-logo-sm { font-size: 2rem; color: var(--hf-brand); }
+
+.auth-brand-title {
+  font-weight: 700;
+  letter-spacing: -.02em;
+}
+
+.auth-brand-subtitle {
+  color: rgba(255, 255, 255, .75);
+}
+
+.auth-brand-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0;
+  color: rgba(255, 255, 255, .85);
+  font-size: .9rem;
+}
+.auth-brand-list li {
+  margin-bottom: .6rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.auth-brand-list i { color: var(--hf-brand); }
+
+.auth-form-card {
+  width: 100%;
+  max-width: 380px;
+  padding: 1rem;
+}
+
+.auth-form-card .form-control:focus,
+.auth-form-card .form-check-input:focus {
+  border-color: var(--hf-brand);
+  box-shadow: 0 0 0 .2rem rgba(201, 147, 47, .25);
+}
