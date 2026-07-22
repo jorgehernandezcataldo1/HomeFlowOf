@@ -1,0 +1,126 @@
+﻿@* HomeFlow.Web/Views/Checklist/Configuracion.cshtml *@
+@{
+    ViewData["Title"] = "Checklists";
+}
+<h3 class="mb-4">Configuración de checklists</h3>
+
+<ul class="nav nav-tabs mb-3">
+    <li class="nav-item"><button class="nav-link active" onclick="cambiarTipo('Cliente', this)">Propietario / Cliente</button></li>
+    <li class="nav-item"><button class="nav-link" onclick="cambiarTipo('Propiedad', this)">Propiedad</button></li>
+</ul>
+
+<div id="plantillaExistente"></div>
+
+<div class="card" id="formNuevaPlantilla">
+    <div class="card-body">
+        <h5 class="card-title">Crear plantilla</h5>
+        <div class="mb-3">
+            <label class="form-label">Nombre de la plantilla</label>
+            <input class="form-control" id="cp_nombre" placeholder="Ej: Checklist de ingreso de propietario">
+        </div>
+        <div id="itemsContainer"></div>
+        <button type="button" class="btn btn-outline-secondary btn-sm mb-3" onclick="agregarItem()">
+            <i class="bi bi-plus-lg"></i> Agregar ítem
+        </button>
+        <div id="plantillaError" class="alert alert-danger d-none"></div>
+        <button type="button" class="btn btn-primary" onclick="guardarPlantilla()">Guardar plantilla</button>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let tipoActual = 'Cliente';
+        let contadorItems = 0;
+
+        function agregarItem(descripcion = '', obligatorio = true) {
+            contadorItems++;
+            const div = document.createElement('div');
+            div.className = 'row mb-2 align-items-center item-row';
+            div.innerHTML = `
+                <div class="col-8">
+                    <input type="text" class="form-control form-control-sm item-descripcion" placeholder="Descripción del ítem" value="${descripcion}">
+                </div>
+                <div class="col-3">
+                    <div class="form-check">
+                        <input class="form-check-input item-obligatorio" type="checkbox" ${obligatorio ? 'checked' : ''}>
+                        <label class="form-check-label small">Obligatorio</label>
+                    </div>
+                </div>
+                <div class="col-1">
+                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="this.closest('.item-row').remove()">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>`;
+            document.getElementById('itemsContainer').appendChild(div);
+        }
+
+        async function cambiarTipo(tipo, boton) {
+            tipoActual = tipo;
+            document.querySelectorAll('.nav-tabs .nav-link').forEach(b => b.classList.remove('active'));
+            boton.classList.add('active');
+            await cargarPlantillaExistente();
+        }
+
+        async function cargarPlantillaExistente() {
+            const cont = document.getElementById('plantillaExistente');
+            const formNueva = document.getElementById('formNuevaPlantilla');
+            cont.innerHTML = '<div class="text-muted py-2">Buscando plantilla...</div>';
+
+            const res = await (await apiFetch(`/api/checklist/plantilla/${tipoActual}`)).json();
+
+            if (!res.success) {
+                cont.innerHTML = '';
+                formNueva.classList.remove('d-none');
+                return;
+            }
+
+            formNueva.classList.add('d-none');
+            cont.innerHTML = `
+                <div class="alert alert-success">
+                    <strong>${res.data.nombre}</strong> ya está configurada para este tipo.
+                    <ul class="mb-0 mt-2">
+                        ${res.data.items.map(i => `<li>${i.descripcion} ${i.obligatorio ? '<span class="badge bg-secondary">obligatorio</span>' : ''}</li>`).join('')}
+                    </ul>
+                </div>`;
+        }
+
+        async function guardarPlantilla() {
+            const errorBox = document.getElementById('plantillaError');
+            errorBox.classList.add('d-none');
+
+            const items = Array.from(document.querySelectorAll('.item-row')).map((row, idx) => ({
+                descripcion: row.querySelector('.item-descripcion').value,
+                obligatorio: row.querySelector('.item-obligatorio').checked,
+                orden: idx + 1
+            })).filter(i => i.descripcion.trim() !== '');
+
+            if (items.length === 0) {
+                errorBox.textContent = 'Agrega al menos un ítem.';
+                errorBox.classList.remove('d-none');
+                return;
+            }
+
+            const resp = await apiFetch('/api/checklist/plantillas', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nombre: document.getElementById('cp_nombre').value, tipoChecklist: tipoActual, items })
+            });
+            const res = await resp.json();
+
+            if (!resp.ok || !res.success) {
+                errorBox.textContent = res.message || 'Error al guardar la plantilla.';
+                errorBox.classList.remove('d-none');
+                return;
+            }
+
+            await cargarPlantillaExistente();
+        }
+
+        agregarItem('Documento de identidad verificado', true);
+        agregarItem('Cuenta bancaria verificada', true);
+        agregarItem('Antecedentes sin problemas', true);
+        agregarItem('Foto de carnet subida', false);
+
+        cargarPlantillaExistente();
+    </script>
+}

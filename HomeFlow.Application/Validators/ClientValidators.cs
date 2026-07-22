@@ -1,5 +1,6 @@
-using HomeFlow.Shared.DTOs.Clients;
 using FluentValidation;
+using HomeFlow.Application.DTOs;
+using HomeFlow.Shared.DTOs.Clients;
 using System.Text.RegularExpressions;
 
 namespace HomeFlow.Application.Validators
@@ -94,6 +95,22 @@ namespace HomeFlow.Application.Validators
             RuleFor(x => x.TipoMascota)
                 .MaximumLength(100).WithMessage("El tipo de mascota no puede exceder 100 caracteres")
                 .When(x => !string.IsNullOrEmpty(x.TipoMascota));
+        }
+    }
+
+    public class ClienteCreateUpdateDtoValidator : AbstractValidator<ClienteCreateUpdateDto>
+    {
+        public ClienteCreateUpdateDtoValidator()
+        {
+            RuleFor(x => x.Rut).NotEmpty()
+                .Matches(@"^\d{7,8}-[0-9K]$", RegexOptions.IgnoreCase).WithMessage("RUT en formato 12345678-9");
+            RuleFor(x => x.Nombres).NotEmpty().MaximumLength(100);
+            RuleFor(x => x.Apellidos).NotEmpty().MaximumLength(100);
+            RuleFor(x => x.Correo).NotEmpty().EmailAddress();
+            RuleFor(x => x.Telefono).Matches(@"^\d{9,15}$").When(x => !string.IsNullOrEmpty(x.Telefono));
+            RuleFor(x => x)
+                .Must(x => x.EsPropietario || x.EsArrendatarioComprador)
+                .WithMessage("El cliente debe ser Propietario y/o Arrendatario/Comprador.");
         }
     }
 }

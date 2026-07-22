@@ -7,23 +7,45 @@
   </PropertyGroup>
 
   <ItemGroup>
-	<Compile Remove="Controllers\ClientesController.cs" />
+    <Compile Remove="Areas\**" />
+    <Compile Remove="Extensions\**" />
+    <Compile Remove="Filters\**" />
+    <Compile Remove="Helpers\**" />
+    <Compile Remove="Middlewares\**" />
+    <Compile Remove="Scripts\**" />
+    <Compile Remove="ViewComponents\**" />
+    <Content Remove="Areas\**" />
+    <Content Remove="Extensions\**" />
+    <Content Remove="Filters\**" />
+    <Content Remove="Helpers\**" />
+    <Content Remove="Middlewares\**" />
+    <Content Remove="Scripts\**" />
+    <Content Remove="ViewComponents\**" />
+    <EmbeddedResource Remove="Areas\**" />
+    <EmbeddedResource Remove="Extensions\**" />
+    <EmbeddedResource Remove="Filters\**" />
+    <EmbeddedResource Remove="Helpers\**" />
+    <EmbeddedResource Remove="Middlewares\**" />
+    <EmbeddedResource Remove="Scripts\**" />
+    <EmbeddedResource Remove="ViewComponents\**" />
+    <None Remove="Areas\**" />
+    <None Remove="Extensions\**" />
+    <None Remove="Filters\**" />
+    <None Remove="Helpers\**" />
+    <None Remove="Middlewares\**" />
+    <None Remove="Scripts\**" />
+    <None Remove="ViewComponents\**" />
+  </ItemGroup>
+
+  <ItemGroup>
 	<Compile Remove="Controllers\PropertiesController.cs" />
 	<ProjectReference Include="..\HomeFlow.Application\HomeFlow.Application.csproj" />
 	<ProjectReference Include="..\HomeFlow.Infrastructure\HomeFlow.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-	<Folder Include="Extensions\" />
-	<Folder Include="Filters\" />
-	<Folder Include="Middlewares\" />
 	<Folder Include="Models\" />
-	<Folder Include="Helpers\" />
-	<Folder Include="Areas\" />
-	<Folder Include="Scripts\" />
-	<Folder Include="ViewComponents\" />
 	<Folder Include="wwwroot\" />
-	<Folder Include="Views\" />
   </ItemGroup>
 
   <ItemGroup>

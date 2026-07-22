@@ -15,13 +15,25 @@ namespace HomeFlow.Application
     /// </summary>
     public static class ApplicationExtensions
     {
+        //public static IServiceCollection AddApplication(this IServiceCollection services)
+        //{
+        //    // Registrar validadores
+        //    services.AddValidatorsFromAssemblyContaining(typeof(ApplicationExtensions));
+
+        //    // Servicios de aplicacion.
+        //    services.AddScoped<IAuthService, AuthService>();
+
+        //    return services;
+        //}
+
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            // Registrar validadores
             services.AddValidatorsFromAssemblyContaining(typeof(ApplicationExtensions));
 
-            // Servicios de aplicacion.
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IUsuarioService, UsuarioService>();
+            services.AddScoped<IClienteService, ClienteService>();
+            services.AddScoped<IChecklistService, ChecklistService>();
 
             return services;
         }

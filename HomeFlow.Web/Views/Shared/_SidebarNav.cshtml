@@ -6,36 +6,24 @@
     // no valida esto en tiempo de compilación, así que no rompe el build.
 }
 <div class="sidebar-inner py-3">
-    <ul class="nav nav-pills flex-column gap-1 px-2">
+    <ul class="nav flex-column pt-3">
         <li class="nav-item">
-            <a class="nav-link" asp-controller="Dashboard" asp-action="Index">
-                <i class="bi bi-speedometer2 me-2"></i>Dashboard
-            </a>
+            <a class="nav-link text-white" href="/Dashboard/Index"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" asp-controller="Clientes" asp-action="Index">
-                <i class="bi bi-people-fill me-2"></i>Clientes
-            </a>
+            <a class="nav-link text-white" href="/Clientes/Propietarios"><i class="bi bi-person-badge me-2"></i>Propietarios</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" asp-controller="Propiedades" asp-action="Index">
-                <i class="bi bi-building me-2"></i>Propiedades
-            </a>
+            <a class="nav-link text-white-50" href="#"><i class="bi bi-key me-2"></i>Arrendatarios <span class="badge bg-secondary">pronto</span></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" asp-controller="Visitas" asp-action="Index">
-                <i class="bi bi-calendar-check me-2"></i>Visitas
-            </a>
+            <a class="nav-link text-white-50" href="#"><i class="bi bi-building me-2"></i>Propiedades <span class="badge bg-secondary">pronto</span></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" asp-controller="Checklists" asp-action="Index">
-                <i class="bi bi-check2-square me-2"></i>Checklists
-            </a>
+            <a class="nav-link text-white" href="/Checklist/Configuracion"><i class="bi bi-check2-square me-2"></i>Checklists</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" asp-controller="Contratos" asp-action="Index">
-                <i class="bi bi-file-earmark-text-fill me-2"></i>Contratos
-            </a>
+            <a class="nav-link text-white" href="/Usuarios/Index"><i class="bi bi-people me-2"></i>Usuarios</a>
         </li>
     </ul>
 </div>

@@ -1,65 +1,63 @@
 ﻿using HomeFlow.Infrastructure;
 using HomeFlow.Application;
+using HomeFlow.Application.Interfaces;
+using HomeFlow.Web.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Authorization;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Por defecto se exige un usuario autenticado en TODOS los controladores
-// (web y api). Las acciones públicas (login, etc.) se marcan explícitamente
-// con [AllowAnonymous]. Esto es intencional: es más seguro partir "cerrado"
-// y abrir puntualmente, que partir abierto y olvidar proteger algo.
-builder.Services.AddControllersWithViews(options =>
-{
-    var requireAuthenticatedUser = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()
-        .Build();
+builder.Services.AddControllersWithViews()
+    .AddJsonOptions(options =>
+    {
+        // Permite enviar/recibir enums como texto ("Cliente") o número (1) indistintamente
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
-    options.Filters.Add(new AuthorizeFilter(requireAuthenticatedUser));
-});
-
-// Add Infrastructure - Entity Framework y Repositorios
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddInfrastructure(connectionString);
-
-// Add Application Services - Servicios y Validadores
+builder.Services.AddInfrastructure(connectionString!);
 builder.Services.AddApplication();
 
-// Autenticación por cookies (login del corredor / usuario de la empresa)
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Auth/Login";
-        options.LogoutPath = "/Auth/Logout";
-        options.AccessDeniedPath = "/Auth/AccessDenied";
+        options.LoginPath = "/Account/Login";
+        options.LogoutPath = "/Account/Logout";
+        options.AccessDeniedPath = "/Account/Login";
         options.ExpireTimeSpan = TimeSpan.FromHours(8);
         options.SlidingExpiration = true;
         options.Cookie.Name = "HomeFlow.Auth";
         options.Cookie.HttpOnly = true;
         options.Cookie.SameSite = SameSiteMode.Lax;
+
+        // Clave: si es una llamada a la API, responde 401 en vez de redirigir a una página HTML
+        options.Events.OnRedirectToLogin = context =>
+        {
+            if (context.Request.Path.StartsWithSegments("/api"))
+            {
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                return Task.CompletedTask;
+            }
+            context.Response.Redirect(context.RedirectUri);
+            return Task.CompletedTask;
+        };
     });
 
 builder.Services.AddAuthorization();
 
-// CORS (útil si más adelante consumes la API desde otra app / móvil)
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalhost", policy =>
-    {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
-    });
+        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 });
 
 var app = builder.Build();
 
-// Aplica migraciones EF Core automáticamente al iniciar
 app.ApplyMigrations();
 
-// Configure the HTTP request pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -68,12 +66,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseCors("AllowLocalhost");
-
-// El orden importa: Authentication SIEMPRE antes de Authorization
 app.UseAuthentication();
 app.UseAuthorization();
 
